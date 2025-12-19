@@ -7,6 +7,14 @@
 
 **AuBot** is an omnidirectional mobile robot based on Mecanum wheels, controlled by **ROS 2 Humble** running on an **Intel NUC6CAYH** (Ubuntu Server 22.04). The vehicle is equipped with a **USB Webcam** for visual feedback and an **RPLidar A1** sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation, obstacle avoidance, and autonomous map exploration.
 
+## 📸 Demo & Gallery
+
+### 🎥 Project Video
+![AuBot Animated Demo](./docs/demo.gif)
+
+### 🤖 Real Robot
+![Real Robot Implementation](./docs/robot_real.jpg)
+
 ## ⚙️ Hardware Specifications
 
 The robot is built upon a custom hardware architecture focusing on modularity and performance:
@@ -44,6 +52,9 @@ The robot is built upon a custom hardware architecture focusing on modularity an
 ### 2. Environment Setup
 
 **Step 1: Install Python Dependencies**
+```bash
+pip install -r requirements.txt
+```
 
 **Step 2: Build ROS 2 Workspace**
 ```bash
@@ -57,4 +68,37 @@ source install/setup.bash
 **Step 3: Setup Web Interface**
 ```bash
 cd web_interface
-npm install -r requirements.txt
+npm install
+```
+
+## 🎮 Usage
+**Launch Robot Core (ROS 2)**
+```bash
+cd ros2_ws
+source install/setup.bash
+ros2 launch my_robot_description navigation_launch.py || ros2 launch my_robot_description exploration_launch.py
+```
+
+**Start Web Dashboard**
+```bash
+cd web_interface
+npm run dev
+```
+
+**Start AI Perception (YOLOv8)**
+```bash
+python3 web_interface/ai_server.py
+```
+
+**Voice Control**
+```bash
+cd ros2_ws
+source install/setup.bash
+ros2 run voice_control voice_node
+```
+
+## 🗺️ SLAM & Navigation Modes
+To save a new map:
+```bash
+ros2 run nav2_map_server map_saver_cli -f my_map
+```
