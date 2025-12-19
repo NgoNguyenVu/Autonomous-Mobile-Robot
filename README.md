@@ -1,26 +1,60 @@
-# 🤖 Autonomous Mobile Robot - Graduation Project
+# 🤖 AuBot - Autonomous Mobile Robot Platform
 
-![Robot Demo](https://www.youtube.com/watch?v=VJ9UU_NtgG0&t=1s)
+![ROS2](https://img.shields.io/badge/ROS2-Humble-blue?logo=ros&logoColor=white)
+![ReactJS](https://img.shields.io/badge/Interface-ReactJS-61DAFB?logo=react&logoColor=black)
+![STM32](https://img.shields.io/badge/Hardware-STM32-green?logo=stmicroelectronics&logoColor=white)
+![Intel](https://img.shields.io/badge/Compute-Intel_NUC-0071C5?logo=intel&logoColor=white)
 
-Đồ án tốt nghiệp: Hệ thống Robot tự hành giám sát thông minh tích hợp AI và Web Control.
-Dự án bao gồm: Điều khiển xe Mecanum, tự động khám phá map ,định vị SLAM, tự động tránh vật cản, nhận diện vật thể (AI) và điều khiển bằng giọng nói.
+**AuBot** is an omnidirectional mobile robot based on Mecanum wheels, controlled by **ROS 2 Humble** running on an **Intel NUC6CAYH** (Ubuntu Server 22.04). The vehicle is equipped with a **USB Webcam** for visual feedback and an **RPLidar A1** sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation, obstacle avoidance, and autonomous map exploration.
 
+## ⚙️ Hardware Specifications
 
-## ✨ Tính năng chính (Features)
+The robot is built upon a custom hardware architecture focusing on modularity and performance:
 
-* **Web Dashboard:** Giao diện giám sát camera, bản đồ và điều khiển robot từ xa (ReactJS).
-* **Explore Map:** Tự động khám phá và mở bản đồ.
-* **AI Object Detection:** Nhận diện vật thể thời gian thực sử dụng YOLOv8.
-* **Navigation:** Tự động lập bản đồ (SLAM) và tìm đường đi ngắn nhất.
-* **Voice Control:** Điều khiển robot bằng giọng nói tiếng Việt/Anh.
-* **Hardware Control:** Giao tiếp với vi điều khiển STM32 qua Serial.
+| Component | Model / Specs | Function |
+| :--- | :--- | :--- |
+| **Main Computer** | **Intel NUC6CAYH** | Runs Ubuntu 22.04, ROS 2, AI Processing, and Web Server. |
+| **Microcontroller** | **STM32F411CEU6** | Handles PID control for motors and reads encoder data. |
+| **Lidar Sensor** | **RPLidar A1M8** | 360° laser scanner for SLAM (Mapping) and Obstacle Avoidance. |
+| **Visual Sensor** | **USB Webcam** | Provides video stream for remote monitoring and YOLOv8 object detection. |
+| **Drive System** | **4x Mecanum Wheels** | Enables omnidirectional movement (Holonomic drive). |
+| **Actuators** | **4x JGB37 Motors** | DC Geared motors with integrated magnetic encoders. |
+| **Motor Drivers** | **2x TB6612FNG** | Dual H-Bridge driver for controlling 4 motors via PWM. |
 
-## 🛠️ Cấu trúc dự án (Project Structure)
+## 🚀 Key Features
 
-* `ros2_ws/`: Chứa source code ROS 2 (Điều khiển, SLAM, Navigation).
-    * `explorer_map`: Thuật toán khám phá bản đồ.
-    * `mecanum_control`: Kinematics cho bánh xe Mecanum.
-    * `voice_control`: Xử lý lệnh giọng nói.
-    * `stm32_bridge`: Cầu nối giao tiếp Hardware.
-* `web_interface/`: Source code Web App (ReactJS + Vite).
-* `ai_server.py`: Server xử lý AI (YOLOv8) độc lập.
+* **Autonomous Navigation:** Path planning using Nav2 stack and SLAM Toolbox.
+* **Map Exploration:** Automatically explores unknown environments (`explore_lite` / `m-explore`).
+* **AI Perception:** Real-time object detection and following using YOLOv8.
+* **Web Interface:** A modern ReactJS dashboard for map visualization and teleoperation.
+* **Voice Command:** Integrated voice recognition for basic robot control.
+
+## 🛠️ System Architecture
+
+* **High-Level:** The Intel NUC handles heavy tasks like path planning (Nav2), mapping, and Computer Vision.
+* **Low-Level:** The STM32 communicates with the NUC via Serial (UART) to execute velocity commands (`cmd_vel`) and publish odometry data.
+* **User Interface:** A ReactJS web dashboard connects to the robot via WebSocket (`rosbridge`) for real-time control.
+
+## ⚙️ Installation & Setup
+
+### 1. Prerequisites
+* **OS:** Ubuntu 22.04 LTS (Desktop/Server)
+* **ROS:** ROS 2 Humble Hawksbill
+
+### 2. Environment Setup
+
+**Step 1: Install Python Dependencies**
+
+**Step 2: Build ROS 2 Workspace**
+```bash
+cd ros2_ws
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --symlink-install
+source install/setup.bash
+```
+
+**Step 3: Setup Web Interface**
+```bash
+cd web_interface
+npm install -r requirements.txt
