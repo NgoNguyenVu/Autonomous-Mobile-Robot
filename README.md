@@ -12,6 +12,8 @@
 ### 🎥 Project Video
 ![AuBot Animated Demo](./docs/demogit.gif)
 
+> 📺 **[Click here to watch the full video on YouTube](https://www.youtube.com/watch?v=VJ9UU_NtgG0)**
+
 ### 🤖 Real Robot
 ![Real Robot Implementation](./docs/robot_real.jpg)
 
