@@ -1,0 +1,433 @@
+/* ==========================================================================
+   0. VARIABLES & THEME CONFIG
+   ========================================================================== */
+:root {
+  /* Colors */
+  --bg-body: #282c34;
+  --bg-sidebar: #20232a;
+  --bg-panel: #2c313a;
+  --bg-map: #e5e5e5;
+  
+  /* Accents */
+  --color-primary: #61dafb;    /* Xanh React */
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-danger-hover: #e44c5b;
+  --color-warning: #ffc107;
+  --color-white: #ffffff;
+  --color-text-muted: #aaaaaa;
+  
+  /* Borders & Shadows */
+  --border-color: #444444;
+  --shadow-sm: 0 4px 10px rgba(0,0,0,0.3);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+  
+  /* Dimensions */
+  --sidebar-width: 320px;
+}
+
+/* ==========================================================================
+   1. GLOBAL & RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-body);
+  color: var(--color-white);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-panel); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #777; }
+
+/* ==========================================================================
+   2. MAIN LAYOUT
+   ========================================================================== */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* --- Left Column: Map --- */
+.map-container {
+  flex: 3;
+  background-color: var(--bg-map);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#map-viewer {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Right Column: Sidebar --- */
+.sidebar-container {
+  flex: 1;
+  min-width: var(--sidebar-width);
+  background-color: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+}
+
+/* ==========================================================================
+   3. SIDEBAR COMPONENTS
+   ========================================================================== */
+
+/* Connection Status */
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  padding: 10px 0 15px 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.status-light {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+.status-connected { background-color: var(--color-success); box-shadow: 0 0 8px var(--color-success); }
+.status-disconnected { background-color: var(--color-danger); box-shadow: 0 0 8px var(--color-danger); }
+
+/* Map Tools */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 70px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-panel);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tool-btn:hover {
+  background-color: #3a404c;
+  color: #fff;
+  border-color: #666;
+}
+
+.tool-btn.active {
+  background-color: rgba(255, 193, 7, 0.15);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.2);
+}
+.tool-icon { font-size: 1.5rem; }
+
+/* Waypoint List */
+.wp-list-container {
+  max-height: 250px; 
+  overflow-y: auto;
+  padding-right: 5px;
+}
+/* ==========================================================================
+   AI CAMERA - SCI-FI HUD THEME
+   ========================================================================== */
+
+/* 1. Khung chính - Tạo cảm giác như một module phần cứng */
+.ai-camera-panel {
+  position: relative;
+  width: 100%;
+  background: #0b0d10; /* Màu đen sâu */
+  border: 1px solid #333;
+  border-top: 2px solid #00d2ff; /* Viền trên màu xanh Cyan nổi bật */
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  margin-bottom: 15px;
+  font-family: 'Segoe UI', 'Roboto Mono', monospace; /* Font kỹ thuật */
+}
+
+/* 2. Header - Nhìn giống thanh tiêu đề cửa sổ terminal */
+.ai-camera-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0, 210, 255, 0.05); /* Nền xanh mờ */
+  border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+}
+
+.ai-title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #00d2ff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 5px rgba(0, 210, 255, 0.5); /* Chữ phát sáng nhẹ */
+}
+
+/* Trạng thái LIVE/OFFLINE */
+.ai-status {
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.ai-status.online {
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 5px rgba(0, 255, 136, 0.2);
+  animation: pulse-green 2s infinite;
+}
+
+.ai-status.offline {
+  color: #ff3333;
+  background: rgba(255, 51, 51, 0.1);
+  border: 1px solid rgba(255, 51, 51, 0.3);
+}
+
+/* 3. Khu vực hiển thị Camera */
+.ai-camera-content {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Hình ảnh camera thực tế */
+.ai-camera-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9; /* Hơi mờ tí để hòa trộn với nền đen */
+}
+
+/* 4. Màn hình lỗi / Mất tín hiệu */
+.ai-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  /* Tạo nền nhiễu hạt (Noise) */
+  background-image: repeating-linear-gradient(
+    45deg,
+    #111 0,
+    #111 10px,
+    #151515 10px,
+    #151515 20px
+  );
+  color: #666;
+  text-align: center;
+  z-index: 5; /* Nằm đè lên các lớp phủ */
+}
+
+.ai-placeholder p {
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  color: #ff3333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Nút kết nối lại */
+.ai-placeholder button {
+  background: transparent;
+  border: 1px solid #00d2ff;
+  color: #00d2ff;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-weight: bold;
+}
+
+.ai-placeholder button:hover {
+  background: rgba(0, 210, 255, 0.15);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Animation nhấp nháy cho chữ LIVE */
+@keyframes pulse-green {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+/* ==========================================================================
+   4. TELEOP CONTROLS (Core)
+   ========================================================================== */
+.teleop-wrapper {
+  background-color: var(--bg-panel);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.teleop-header h3 {
+  margin: 0 0 10px 0;
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.teleop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; 
+  width: 100%;
+  max-width: 240px;
+}
+
+.control-btn {
+  aspect-ratio: 1;
+  background-color: #3b4048;
+  border: 1px solid #555;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #222;
+  transition: all 0.1s ease;
+  user-select: none;
+}
+
+.control-btn:hover:not(:active) { background-color: #4a515c; }
+.control-btn:active, .control-btn.active {
+  transform: translateY(4px);
+  box-shadow: none;
+  background-color: var(--color-primary);
+  color: #000;
+  border-color: var(--color-primary);
+}
+
+.stop-btn {
+  background-color: var(--color-danger);
+  border-color: #b02a37;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 4px 0 #8a1f29;
+}
+.stop-btn:hover:not(:active) { background-color: var(--color-danger-hover); }
+.stop-btn:active, .stop-btn.active {
+  background-color: #ff4d5e;
+  color: white;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   5. FLOATING TELEOP WIDGET
+   ========================================================================== */
+.floating-teleop-wrapper {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Toggle Button */
+.map-floating-btn {
+  pointer-events: auto;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(97, 218, 251, 0.9);
+  border: 3px solid #fff;
+  color: var(--bg-sidebar);
+  font-size: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  padding-bottom: 10px;
+}
+
+.map-floating-btn:hover { transform: scale(1.1); background-color: #fff; border-color: var(--color-primary); }
+.map-floating-btn.active { background-color: var(--color-warning); color: #000; border-color: #fff; }
+
+/* Glassmorphism Panel */
+.teleop-widget-box {
+  pointer-events: auto;
+  background-color: rgba(32, 35, 42, 0.65); 
+  backdrop-filter: blur(4px);
+  padding: 15px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-glass);
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+  animation: slideUpFade 0.2s ease-out;
+}
+
+/* Override Core Styles for Transparency */
+.teleop-widget-box .teleop-wrapper {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+.teleop-widget-box .control-btn {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.teleop-widget-box .control-btn:hover { background-color: rgba(255, 255, 255, 0.3); }
+.teleop-widget-box .stop-btn { background-color: rgba(220, 53, 69, 0.85); }
+
+/* Animation */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

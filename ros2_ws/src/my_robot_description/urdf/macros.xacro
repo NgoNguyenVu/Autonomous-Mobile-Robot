@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="wheel_assembly" params="prefix parent joint_origin_xyz joint_origin_rpy reflect">
+    
+    <link name="${prefix}_Link">
+      <inertial>
+        <origin xyz="-0.00076 0 0.072" rpy="0 0 0" />
+        <mass value="0.0322" />
+        <inertia ixx="8.48e-06" ixy="0" ixz="0" iyy="8.98e-06" iyz="0" izz="3.65e-06" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://my_robot_description/urdf/meshes/${prefix}_Link.STL" />
+        </geometry>
+        <material name="blueish"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://my_robot_description/urdf/meshes/${prefix}_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}_joint" type="fixed">
+      <origin xyz="${joint_origin_xyz}" rpy="${joint_origin_rpy}" />
+      <parent link="${parent}" />
+      <child link="${prefix}_Link" />
+    </joint>
+
+    <link name="wheel_${prefix}_Link">
+      <inertial>
+        <origin xyz="0 0 0.016" rpy="0 0 0" />
+        <mass value="0.0493" />
+        <inertia ixx="1.35e-05" ixy="0" ixz="0" iyy="1.35e-05" iyz="0" izz="1.88e-05" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://my_robot_description/urdf/meshes/wheel_${prefix}_Link.STL" />
+        </geometry>
+        <material name="blueish"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://my_robot_description/urdf/meshes/wheel_${prefix}_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="wheel_${prefix}_joint" type="continuous">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}_Link" />
+      <child link="wheel_${prefix}_Link" />
+      <axis xyz="0 0 ${reflect}" />
+      </joint>
+
+  </xacro:macro>
+</robot>

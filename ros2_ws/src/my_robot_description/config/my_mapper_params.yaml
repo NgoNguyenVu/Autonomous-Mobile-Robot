@@ -1,0 +1,27 @@
+slam_toolbox:
+  ros__parameters:
+    # --- THÊM DÒNG NÀY VÀO ---
+    use_sim_time: false 
+    
+    solver_plugin: "solver_plugins::CeresSolver"
+    ceres_linear_solver: "SPARSE_NORMAL_CHOLESKY"
+    ceres_preconditioner: "SCHUR_JACOBI"
+    ceres_trust_strategy: "LEVENBERG_MARQUARDT"
+
+    # === Các frame phải khớp với robot của bạn ===
+    odom_frame: "odom"
+    map_frame: "map"
+    base_frame: "base_link"
+    scan_topic: "/scan" 
+
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_time_interval: 0.5
+    transform_publish_period: 0.02
+    map_update_interval: 5.0
+    resolution: 0.05
+    max_laser_range: 8.0 
+    
+    # === Các thông số hiệu chỉnh của bạn ===
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.087
