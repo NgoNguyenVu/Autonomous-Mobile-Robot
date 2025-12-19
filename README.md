@@ -10,7 +10,7 @@
 ## 📸 Demo & Gallery
 
 ### 🎥 Project Video
-![AuBot Animated Demo](./docs/demo.gif)
+![AuBot Animated Demo](./docs/demogit.gif)
 
 ### 🤖 Real Robot
 ![Real Robot Implementation](./docs/robot_real.jpg)
