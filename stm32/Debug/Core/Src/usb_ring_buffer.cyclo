@@ -1,0 +1,2 @@
+../Core/Src/usb_ring_buffer.c:9:6:uart_rx_enqueue	2
+../Core/Src/usb_ring_buffer.c:19:6:CDC_Receive_Byte	2
